@@ -1,0 +1,677 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model Person {
+  BusinessEntityID Int      @id
+  PersonType       String   @db.NChar(2)
+  NameStyle        Boolean
+  Title            String?  @db.NVarChar(8)
+  FirstName        String   @db.NVarChar(50)
+  MiddleName       String?  @db.NVarChar(50)
+  LastName         String   @db.NVarChar(50)
+  Suffix           String?  @db.NVarChar(10)
+  EmailPromotion   Int
+  rowguid          String   @db.UniqueIdentifier
+  ModifiedDate     DateTime @db.DateTime
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonAdress {
+  AddressID       Int                       @default(autoincrement()) @id
+  AddressLine1    String                    @db.NVarChar(60)
+  AddressLine2    String?                   @db.NVarChar(60)
+  City            String                    @db.NVarChar(30)
+  StateProvinceID Int
+  PostalCode      String                    @db.NVarChar(15)
+  SpatialLocation Unsupported("geography")?
+  rowguid         String                    @db.UniqueIdentifier
+  ModifiedDate    DateTime                  @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonAdressType {
+  AddressTypeID Int      @default(autoincrement())
+  Name          String   @db.NVarChar(50)
+  rowguid       String   @db.UniqueIdentifier
+  ModifiedDate  DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonBusinessEntity {
+  BusinessEntityID Int      @default(autoincrement())
+  rowguid          String   @db.UniqueIdentifier
+  ModifiedDate     DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonBusinessEntityAdress {
+  BusinessEntityID Int
+  AddressID        Int
+  AddressTypeID    Int
+  rowguid          String   @db.UniqueIdentifier
+  ModifiedDate     DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonBusinessEntityContact {
+  BusinessEntityID Int
+  PersonID         Int
+  ContactTypeID    Int
+  rowguid          String   @db.UniqueIdentifier
+  ModifiedDate     DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonContactType {
+  ContactTypeID Int      @default(autoincrement())
+  Name          String   @db.NVarChar(50)
+  ModifiedDate  DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonCountryRegion {
+  CountryRegionCode String   @db.NVarChar(3)
+  Name              String   @db.NVarChar(50)
+  ModifiedDate      DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonEmailAdress {
+  BusinessEntityID Int
+  EmailAddressID   Int      @default(autoincrement())
+  EmailAddress     String?  @db.NVarChar(50)
+  rowguid          String   @db.UniqueIdentifier
+  ModifiedDate     DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonPassword {
+  BusinessEntityID Int
+  PasswordHash     String   @db.VarChar(128)
+  PasswordSalt     String   @db.VarChar(10)
+  rowguid          String   @db.UniqueIdentifier
+  ModifiedDate     DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonPhone {
+  BusinessEntityID  Int
+  PhoneNumber       String   @db.NVarChar(25)
+  PhoneNumberTypeID Int
+  ModifiedDate      DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonPhoneNumberType {
+  PhoneNumberTypeID Int      @default(autoincrement())
+  Name              String   @db.NVarChar(50)
+  ModifiedDate      DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PersonStateProvince {
+  StateProvinceID         Int      @default(autoincrement())
+  StateProvinceCode       String   @db.NChar(3)
+  CountryRegionCode       String   @db.NVarChar(3)
+  IsOnlyStateProvinceFlag Boolean
+  Name                    String   @db.NVarChar(50)
+  TerritoryID             Int
+  rowguid                 String   @db.UniqueIdentifier
+  ModifiedDate            DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionBillOfMaterials {
+  BillOfMaterialsID Int       @default(autoincrement()) @id
+  ProductAssemblyID Int?
+  ComponentID       Int
+  StartDate         DateTime  @db.DateTime
+  EndDate           DateTime? @db.DateTime
+  UnitMeasureCode   String    @db.NChar(3)
+  BOMLevel          Int       @db.SmallInt
+  PerAssemblyQty    Float
+  ModifiedDate      DateTime  @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionCulture {
+  CultureID    String   @db.NChar(6) @id
+  Name         String   @db.NVarChar(50)
+  ModifiedDate DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionLocation {
+  LocationID   Int      @default(autoincrement()) @db.SmallInt @id
+  Name         String   @db.NVarChar(50)
+  CostRate     Float    @db.SmallMoney
+  Availability Float
+  ModifiedDate DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionProduct {
+  ProductID             Int       @default(autoincrement()) @id
+  Name                  String    @db.NVarChar(50)
+  ProductNumber         String    @db.NVarChar(25)
+  MakeFlag              Boolean
+  FinishedGoodsFlag     Boolean
+  Color                 String?   @db.NVarChar(15)
+  SafetyStockLevel      Int       @db.SmallInt
+  ReorderPoint          Int       @db.SmallInt
+  StandardCost          Float     @db.Money
+  ListPrice             Float     @db.Money
+  Size                  String?   @db.NVarChar(5)
+  SizeUnitMeasureCode   String?   @db.NChar(3)
+  WeightUnitMeasureCode String?   @db.NChar(3)
+  Weight                Float?  
+  DaysToManufacture     Int
+  ProductLine           String?   @db.NChar(2)
+  Class                 String?   @db.NChar(2)
+  Style                 String?   @db.NChar(2)
+  ProductSubcategoryID  Int?
+  ProductModelID        Int?
+  SellStartDate         DateTime  @db.DateTime
+  SellEndDate           DateTime? @db.DateTime
+  DiscontinuedDate      DateTime? @db.DateTime
+  rowguid               String    @db.UniqueIdentifier
+  ModifiedDate          DateTime  @db.DateTime
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionProductCategory {
+  ProductCategoryID Int      @default(autoincrement()) @id
+  Name              String   @db.NVarChar(50)
+  rowguid           String   @db.UniqueIdentifier
+  ModifiedDate      DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionProductDescription {
+  ProductDescriptionID Int      @default(autoincrement()) @id
+  Description          String   @db.NVarChar(400)
+  rowguid              String   @db.UniqueIdentifier
+  ModifiedDate         DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionProductDocument {
+  ProductID    Int
+  DocumentNode Unsupported("hierarchyid")
+  ModifiedDate DateTime                   @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionProductInventory {
+  ProductID    Int      @id
+  LocationID   Int      @db.SmallInt
+  Shelf        String   @db.NVarChar(10)
+  Bin          Int      @db.TinyInt
+  Quantity     Int      @db.SmallInt
+  rowguid      String   @db.UniqueIdentifier
+  ModifiedDate DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionProductModel {
+  ProductModelID Int      @default(autoincrement()) @id
+  Name           String   @db.NVarChar(50)
+  rowguid        String   @db.UniqueIdentifier
+  ModifiedDate   DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionProductModelDescriptionCulture {
+  ProductModelID       Int      @id
+  ProductDescriptionID Int
+  CultureID            String   @db.NChar(6)
+  ModifiedDate         DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionProductPhoto {
+  ProductPhotoID         Int      @default(autoincrement()) @id
+  ThumbNailPhoto         Bytes?
+  ThumbnailPhotoFileName String?  @db.NVarChar(50)
+  LargePhoto             Bytes?
+  LargePhotoFileName     String?  @db.NVarChar(50)
+  ModifiedDate           DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionProductPhotoID {
+  ProductID      Int      @id
+  ProductPhotoID Int
+  Primary        Boolean
+  ModifiedDate   DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionProductReview {
+  ProductReviewID Int      @default(autoincrement()) @id
+  ProductID       Int
+  ReviewerName    String   @db.NVarChar(50)
+  ReviewDate      DateTime @db.DateTime
+  EmailAddress    String   @db.NVarChar(50)
+  Rating          Int
+  Comments        String?  @db.NVarChar(3850)
+  ModifiedDate    DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionProductSubCategory {
+  ProductSubcategoryID Int      @default(autoincrement()) @id
+  ProductCategoryID    Int
+  Name                 String   @db.NVarChar(50)
+  rowguid              String   @db.UniqueIdentifier
+  ModifiedDate         DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionScrapReason {
+  ScrapReasonID Int      @default(autoincrement()) @db.SmallInt @id
+  Name          String   @db.NVarChar(50)
+  ModifiedDate  DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionUnitMeasure {
+  UnitMeasureCode String   @db.NChar(3) @id
+  Name            String   @db.NVarChar(50)
+  ModifiedDate    DateTime @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionWorkOrder {
+  WorkOrderID   Int       @default(autoincrement()) @id
+  ProductID     Int
+  OrderQty      Int
+  StockedQty    Int
+  ScrappedQty   Int       @db.SmallInt
+  StartDate     DateTime  @db.DateTime
+  EndDate       DateTime? @db.DateTime
+  DueDate       DateTime  @db.DateTime
+  ScrapReasonID Int?      @db.SmallInt
+  ModifiedDate  DateTime  @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model ProductionWorkOrderRouting {
+  WorkOrderID        Int       @id
+  ProductID          Int
+  OperationSequence  Int       @db.SmallInt
+  LocationID         Int       @db.SmallInt
+  ScheduledStartDate DateTime  @db.DateTime
+  ScheduledEndDate   DateTime  @db.DateTime
+  ActualStartDate    DateTime? @db.DateTime
+  ActualEndDate      DateTime? @db.DateTime
+  ActualResourceHrs  Float? 
+  PlannedCost        Float     @db.Money
+  ActualCost         Float?    @db.Money
+  ModifiedDate       DateTime  @db.DateTime
+
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PurchasingProductVendor {
+  ProductID        Int
+  BusinessEntityID Int
+  AverageLeadTime  Int
+  StandardPrice    Float     @db.Money
+  LastReceiptCost  Float?    @db.Money
+  LastReceiptDate  DateTime? @db.DateTime
+  MinOrderQty      Int
+  MaxOrderQty      Int
+  OnOrderQty       Int?
+  UnitMeasureCode  String    @db.NChar(3)
+  ModifiedDate     DateTime  @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PurchasingPurchaseOrderDetail {
+  PurchaseOrderID       Int
+  PurchaseOrderDetailID Int      @default(autoincrement())
+  DueDate               DateTime @db.DateTime
+  OrderQty              Int      @db.SmallInt
+  ProductID             Int
+  UnitPrice             Float    @db.Money
+  LineTotal             Float    @db.Money
+  ReceivedQty           Float 
+  RejectedQty           Float 
+  StockedQty            Float  
+  ModifiedDate          DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PurchasingPurchaseOrderHeader {
+  PurchaseOrderID Int       @default(autoincrement())
+  RevisionNumber  Int       @db.TinyInt
+  Status          Int       @db.TinyInt
+  EmployeeID      Int
+  VendorID        Int
+  ShipMethodID    Int
+  OrderDate       DateTime  @db.DateTime
+  ShipDate        DateTime? @db.DateTime
+  SubTotal        Float     @db.Money
+  TaxAmt          Float     @db.Money
+  Freight         Float     @db.Money
+  TotalDue        Float     @db.Money
+  ModifiedDate    DateTime  @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PurchasingShipMethod {
+  ShipMethodID Int      @default(autoincrement())
+  Name         String   @db.NVarChar(50)
+  ShipBase     Float    @db.Money
+  ShipRate     Float    @db.Money
+  rowguid      String   @db.UniqueIdentifier
+  ModifiedDate DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model PurchasingVendor {
+  BusinessEntityID        Int
+  AccountNumber           String   @db.NVarChar(15)
+  Name                    String   @db.NVarChar(50)
+  CreditRating            Int      @db.TinyInt
+  PreferredVendorStatus   Boolean
+  ActiveFlag              Boolean
+  PurchasingWebServiceURL String?  @db.NVarChar(1024)
+  ModifiedDate            DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model RHDepartament {
+  DepartmentID Int      @default(autoincrement()) @db.SmallInt
+  Name         String   @db.NVarChar(50)
+  GroupName    String   @db.NVarChar(50)
+  ModifiedDate DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model RHEmployee {
+  BusinessEntityID  Int
+  NationalIDNumber  String                      @db.NVarChar(15)
+  LoginID           String                      @db.NVarChar(256)
+  OrganizationNode  Unsupported("hierarchyid")?
+  OrganizationLevel Int?                        @db.SmallInt
+  JobTitle          String                      @db.NVarChar(50)
+  BirthDate         DateTime                    @db.Date
+  MaritalStatus     String                      @db.NChar(1)
+  Gender            String                      @db.NChar(1)
+  HireDate          DateTime                    @db.Date
+  SalariedFlag      Boolean
+  VacationHours     Int                         @db.SmallInt
+  SickLeaveHours    Int                         @db.SmallInt
+  CurrentFlag       Boolean
+  rowguid           String                      @db.UniqueIdentifier
+  ModifiedDate      DateTime                    @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model RHShift {
+  ShiftID      Int      @default(autoincrement()) @db.TinyInt
+  Name         String   @db.NVarChar(50)
+  StartTime    DateTime @db.Time
+  EndTime      DateTime @db.Time
+  ModifiedDate DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesCountryRegionCurrency {
+  CountryRegionCode String   @db.NVarChar(3)
+  CurrencyCode      String   @db.NChar(3)
+  ModifiedDate      DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesCreditCard {
+  CreditCardID Int      @default(autoincrement())
+  CardType     String   @db.NVarChar(50)
+  CardNumber   String   @db.NVarChar(25)
+  ExpMonth     Int      @db.TinyInt
+  ExpYear      Int      @db.SmallInt
+  ModifiedDate DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesCurrency {
+  CurrencyCode String   @db.NChar(3)
+  Name         String   @db.NVarChar(50)
+  ModifiedDate DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesCurrencyRate {
+  CurrencyRateID   Int      @default(autoincrement())
+  CurrencyRateDate DateTime @db.DateTime
+  FromCurrencyCode String   @db.NChar(3)
+  ToCurrencyCode   String   @db.NChar(3)
+  AverageRate      Float    @db.Money
+  EndOfDayRate     Float    @db.Money
+  ModifiedDate     DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesCustomer {
+  CustomerID    Int      @default(autoincrement())
+  PersonID      Int?
+  StoreID       Int?
+  TerritoryID   Int?
+  AccountNumber String   @db.VarChar(10)
+  rowguid       String   @db.UniqueIdentifier
+  ModifiedDate  DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesOrderDetail {
+  SalesOrderID          Int
+  SalesOrderDetailID    Int      @default(autoincrement())
+  CarrierTrackingNumber String?  @db.NVarChar(25)
+  OrderQty              Int      @db.SmallInt
+  ProductID             Int
+  SpecialOfferID        Int
+  UnitPrice             Float    @db.Money
+  UnitPriceDiscount     Float    @db.Money
+  LineTotal             Float  
+  rowguid               String   @db.UniqueIdentifier
+  ModifiedDate          DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesOrderHeaderReason {
+  SalesOrderID  Int
+  SalesReasonID Int
+  ModifiedDate  DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesPerson {
+  BusinessEntityID Int
+  TerritoryID      Int?
+  SalesQuota       Float?   @db.Money
+  Bonus            Float    @db.Money
+  CommissionPct    Float    @db.SmallMoney
+  SalesYTD         Float    @db.Money
+  SalesLastYear    Float    @db.Money
+  rowguid          String   @db.UniqueIdentifier
+  ModifiedDate     DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesPersonCreditCard {
+  BusinessEntityID Int
+  CreditCardID     Int
+  ModifiedDate     DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesReason {
+  SalesReasonID Int      @default(autoincrement())
+  Name          String   @db.NVarChar(50)
+  ReasonType    String   @db.NVarChar(50)
+  ModifiedDate  DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesShoppingCartItem {
+  ShoppingCartItemID Int      @default(autoincrement())
+  ShoppingCartID     String   @db.NVarChar(50)
+  Quantity           Int
+  ProductID          Int
+  DateCreated        DateTime @db.DateTime
+  ModifiedDate       DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesSpecialOffer {
+  SpecialOfferID Int      @default(autoincrement())
+  Description    String   @db.NVarChar(255)
+  DiscountPct    Float    @db.SmallMoney
+  Type           String   @db.NVarChar(50)
+  Category       String   @db.NVarChar(50)
+  StartDate      DateTime @db.DateTime
+  EndDate        DateTime @db.DateTime
+  MinQty         Int
+  MaxQty         Int?
+  rowguid        String   @db.UniqueIdentifier
+  ModifiedDate   DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesSpecialOfferProduct {
+  SpecialOfferID Int
+  ProductID      Int
+  rowguid        String   @db.UniqueIdentifier
+  ModifiedDate   DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesStore {
+  BusinessEntityID Int
+  Name             String   @db.NVarChar(50)
+  SalesPersonID    Int?
+  rowguid          String   @db.UniqueIdentifier
+  ModifiedDate     DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesTaxRate {
+  SalesTaxRateID  Int      @default(autoincrement())
+  StateProvinceID Int
+  TaxType         Int      @db.TinyInt
+  TaxRate         Float    @db.SmallMoney
+  Name            String   @db.NVarChar(50)
+  rowguid         String   @db.UniqueIdentifier
+  ModifiedDate    DateTime @db.DateTime
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model SalesTerritory {
+  TerritoryID       Int      @default(autoincrement())
+  Name              String   @db.NVarChar(50)
+  CountryRegionCode String   @db.NVarChar(3)
+  Group             String   @db.NVarChar(50)
+  SalesYTD          Float    @db.Money
+  SalesLastYear     Float    @db.Money
+  CostYTD           Float    @db.Money
+  CostLastYear      Float    @db.Money
+  rowguid           String   @db.UniqueIdentifier
+  ModifiedDate      DateTime @db.DateTime
+
+  @@ignore
+}
